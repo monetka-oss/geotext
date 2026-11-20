@@ -1,4 +1,4 @@
-// State
+﻿// State
 let currentChapter = null;
 let currentLevel = null;
 
