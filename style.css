@@ -1,4 +1,4 @@
-﻿:root{
+:root{
   --bg:#fafafa; --text:#222; --accent:#2c3e50; --card:#fff; --border:#ddd;
 }
 @media (prefers-color-scheme: dark){
