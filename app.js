@@ -1,172 +1,253 @@
-const CHAPTERS=[
- {id:'p2',title:'Шпаргалка по живому грузинскому языку (Часть 2)',levels:[
-  {title:'Фразы-буферы (выиграть время)',rows:[
-   {g:'მოიცა, ერთი წამი...',t:'moitsa, erti tsami...',r:'Погоди, секунду...',c:'Главный тормоз, чтобы дать мозгу пару секунд подумать перед ответом'},
-   {g:'ერთი წუთით, ვფიქრობ...',t:'erti tsutit, vpikhrob...',r:'Секунду, я думаю...',c:'Используй, когда нужно сформулировать мысль'},
-   {g:'რა ჰქვია... / როგორ არის...',t:'ra hkvia... / rogor aris...',r:'Как это называется... / Как же это...',c:'Выручает, если забыл слово прямо посреди предложения'},
-   {g:'კარგი კითხვაა...',t:'kargi kitkhvaa...',r:'Хороший вопрос...',c:'Даёт паузу, даже если вопрос застал врасплох'},
-   {g:'მართალი გითხრა, არ ვიცი ზუსტად...',t:'martali gitkhra, ar vitsi zustad...',r:'Честно говоря, я точно не знаю...',c:'Отличный способ мягко съехать, если не знаешь ответа'},
-   {g:'საინტერესოა...',t:'sainteresoa...',r:'Интересно...',c:'Реакция с паузой на неожиданную инфу'},
-   {g:'ვერ გავიგე, რა თქვი?',t:'ver gavige, ra tkvi?',r:'Я не понял, что ты сказал?',c:'Прямой и естественный переспрос'},
-   {g:'აგი, თავიდან თქვი რა?',t:'ai, tavidan tkvi ra?',r:'Эй, скажи с начала, а?',c:'Разговорный уличный вариант попросить повторить'},
-   {g:'მოიცა, ვერ მივხვდი',t:'moitsa, ver mivkhvdi',r:'Погоди, я не въехал / не догнал',c:'Когда собеседник слишком быстро накидал инфы'}
-  ]},
-  {title:'Короткие «кирпичики»',rows:[
-   {g:'მაღაზიაში მივდივარ',t:'maghaziashi mivdivar',r:'В магазин иду',c:'Пример речи без сложных оборотов: сущность + действие'},
-   {g:'პური მინდა',t:'puri minda',r:'Хлеб хочу',c:'ყავა მინდა (*qava minda* — кофе хочу) / ეს მინდა (*es minda* — это хочу)'},
-   {g:'დრო არ მაქვს',t:'dro ar makvs',r:'Времени нет',c:'Короткий отказ или объяснение спешки'},
-   {g:'რა ღირს?',t:'ra ghirs?',r:'Сколько стоит?',c:'ეს რა ღირს? (*es ra ghirs?* — сколько это стоит?)'},
-   {g:'სად არის?',t:'sad aris?',r:'Где находится?',c:'აქ არის? (*ak aris?* — это здесь?)'},
-   {g:'ცოტა ხანი',t:'tsota khani',r:'Чуть-чуть / немного времени',c:'ცოტა ხანი მოიცა (*tsota khani moitsa* — погоди немного)'},
-   {g:'მალე მოვალ',t:'male moval',r:'Скоро приду / вернусь',c:'Кидаешь, когда отходишь ненадолго'},
-   {g:'ვეღარ ვხვდები',t:'veghar vkhvdebi',r:'Больше не понимаю / не догоняю',c:'Когда объясняют слишком запутанно'},
-   {g:'ანუ',t:'anu',r:'То есть / короче',c:'Слово-связка, чтобы переформулировать мысль, если запутался'}
-  ]},
-  {title:'Сложные предложения (Союзы)',rows:[
-   {g:'რომ (в речი — რო)',t:'rom (ro)',r:'Что / чтобы / когда / если',c:'ვიცი, რო მოხვალ (*vitsi, ro mokhval* — знаю, что придёшь); სახლში რო მიხვალ, დამირეკე (*...когда придёшь, позвони*)'},
-   {g:'ვინც',t:'vints',r:'Кто / который (про людей)',c:'ის ბიჭი, ვინც გუშინ ვნახეთ (*is bichi, vints gushin vnakhet* — тот парень, которого мы вчера видели)'},
-   {g:'რომელიც (რომელი)',t:'romelits (romeli)',r:'Который (про предметы)',c:'ბურთი, რომელიც იქ დევს (*burti, romelits ik devs* — мяч, который там лежит)'},
-   {g:'რაც',t:'rats',r:'То, что / всё, что',c:'ყველაფერი, რაც გითხარი, სიმართლეა (*qvelaperi, rats gitkhari, simartlea* — всё, что я сказал — правда)'},
-   {g:'სადაც',t:'sadats',r:'Где / куда',c:'იმ ადგილას, სადაც ვცხოვრობ (*im adgilas, sadats vtskhovrob* — в том месте, где я живу)'},
-   {g:'როცა',t:'rotsa',r:'Когда',c:'როცა მოიცლი, მომწერე (*rotsa moitsli, momtsere* — когда освободишься, напиши)'},
-   {g:'იმიტომ, რომ (იმიტო რო)',t:'imitom, rom (imito ro)',r:'Потому что',c:'არ მოვედი, იმიტო რო მეზარებოდა (*ar movedi, imito ro mezareboda* — не пришёл, потому что лень было)'},
-   {g:'ამიტომ',t:'amitom',r:'Поэтому',c:'საცობი იყო, ამიტომ დავაგვიანე (*satsobi iqo, amitom davagviane* — была пробка, поэтому опоздал)'},
-   {g:'თუმცა / სამაგიეროდ',t:'tumtsa / samagierod',r:'Хотя / зато',c:'შორია, სამაგიეროდ იაფია (*shoria, samagierod iapia* — далеко, зато дёшево)'},
-   {g:'თუ',t:'tu',r:'Если (реальное условие)',c:'თუ დრო გექნება, გამოიარე (*tu dro gekneba, gamoiare* — если будет время, загляни)'},
-   {g:'რომ ... -დი / -და',t:'rom ... -di / -da',r:'Если бы ... то бы (нереальное условие)',c:'შენს ადგილას რომ ვიყო, მაგას არ ვიზამდი (...если бы я был на твоём месте, не сделал бы)'}
-  ]},
-  {title:'Глаголы в пространстве',rows:[
-   {g:'დევს',t:'devs',r:'Лежит (предметы, круглое)',c:'ტელეფონი მაგიდაზე დევს (*teleponi magidaze devs* — телефон лежит на столе)'},
-   {g:'დგას',t:'dgas',r:'Стоит (на ножках, вертикальное)',c:'ბოთლი მაგიდაზე დგას (*botli magidaze dgas* — бутылка стоит на столе)'},
-   {g:'ზის',t:'zis',r:'Сидит (люди, животные)',c:'კაცი სკამზე ზის (*katsi skamze zis* — мужчина сидит на стуле)'},
-   {g:'წევს',t:'tsevs',r:'Лежит (люди, животные)',c:'ბიჭი ლოგინში წევს (*bichi loginshi tsevs* — парень лежит в постели)'},
-   {g:'კიდია',t:'kidia',r:'Висит',c:'ქურთუკი საკიდზე კიდია (*kurtuki sakidze kidia* — куртка висит на вешалке)'}
-  ]},
-  {title:'Сленг: Одобрение и движ',rows:[
-   {g:'თესლი',t:'tesli',r:'Офигенный, мощнейший, пушка (букв. «семя»)',c:'ძაან თესლი მანქანაა (*dzaan tesli mankanaa* — очень крутая тачка)'},
-   {g:'მაგარი',t:'magari',r:'Крутой, мощный (букв. «твёрдый»)',c:'მაგარი ტიპი (*magari tipi* — крутой пацан)'},
-   {g:'ასწორებს',t:'astsorebs',r:'Кайфово, качает, вставляет',c:'ძაან ასწორებს! (*dzaan astsorebs!* — капец как кайфово!)'},
-   {g:'ძველი ტიპი',t:'dzveli tipi',r:'Старожил, авторитетный чел в тусовке',c:'Человек старой закалки, который шарит за уважение'},
-   {g:'გახურებული',t:'gakhurebuli',r:'Раскалённый, в самом разгаре',c:'სიტუაცია გახურებულია (*situatsia gakhurebulia* — ситуация накалена / движ в разгаре)'},
-   {g:'გაგებული',t:'gagebuli',r:'Прошаренный, «в теме» по жизни',c:'Человек с правильным пониманием'},
-   {g:'ვაიმე! / ვაიმე დედა!',t:'vaime! / vaime deda!',r:'Офигеть! / Ой, мама!',c:'Универсальная реакция на шок, дичь или удивление'}
-  ]},
-  {title:'Сленг: Наглые и тупые типы',rows:[
-   {g:'თავხედი',t:'tavkhedi',r:'Наглый, борзый, беспардонный',c:'რა თავხედია ეს ტიპი! (*ra tavkhedia es tipi!* — какой же он наглый!)'},
-   {g:'პზიორი / გაპზიორებული',t:'pziori / gapziorebuli',r:'Понтовщик / зазвездившийся',c:'ნუ პზიორობ აქ (*nu pziorob ak* — не понтуйся тут)'},
-   {g:'გაბერილი',t:'gaberili',r:'Надутый от пафоса, с короной на голове',c:'Про того, кто слишком много о себе мнит'},
-   {g:'ტლუ',t:'tlu',r:'Тупой, деревянный, тяжело соображающий',c:'რა ტლუ ტიპია, ვერაფერს ხვდება (*ra tlu tipia, verapers khvdeba* — какой же он тупой, ничего не догоняет)'},
-   {g:'გაყინული',t:'gaqinuli',r:'Тормоз (букв. «замороженный»)',c:'Когда человек завис и смотрит стеклянным взглядом'},
-   {g:'ცუდი პონტის ტიპი',t:'tsudi pontis tipi',r:'Мутный челик, тип с гниalcой',c:'Человек, от которого можно ждать подвоха'},
-   {g:'ძაღლი',t:'dzaghli',r:'Крыса, свинский поступок (букв. «собака»)',c:'Жёсткое презрительное слово, кидать только по делу'},
-   {g:'ტვინი არ აქვს',t:'tvini ar akvs',r:'Мозгов нет',c:'Короткая характеристика для того, кто творит дичь'},
-   {g:'აზრზე არ არის',t:'azrze ar aris',r:'Вообще не в адеквате / не отдупляет',c:'სპეციალურად აკეთებს თუ აზრზე არ არის? (*...специально делает или вообще не в теме?*)'}
-  ]}
- ]},
- {id:'ul',title:'Уличный и разговорный грузинский: Братья, Глаголы, Зал и Рынок',levels:[
-  {title:'Уважение, похвала и респект ровному типу',rows:[
-   {g:'ჯიგარი ხარ!',t:'Jigari khar!',r:'Ты душа-человек! / Красавчик!',c:'Высшая благодарность за помощь, подгон или правильный поступок.'},
-   {g:'მაგარი ჯიგარია',t:'Magari jigaria',r:'Он реально душевный / ровный тип',c:'Когда обсуждаешь с третьим лицом достойного пацана.'},
-   {g:'ჩემი ჯიგარი',t:'Chemi jigari',r:'Мой брат / мой родной',c:'Обращение к близкому корешу.'},
-   {g:'საღოლ!',t:'Saghol!',r:'Красавчик! / Уважуха! / Зачёт!',c:'Чисто уличный, пацанский респект за чёткое действие или результат.'},
-   {g:'ყოჩაღ!',t:'Qochagh!',r:'Молодец! / Отлично!',c:'Более классическая похвала (подходит и для старших, и для друзей).'},
-   {g:'აი, ეს მესმის!',t:'Ai, es mesmis!',r:'Вот это я понимаю! / По-нашему!',c:'Реакция на дельную идею или крутой поступок.'},
-   {g:'ნამდვილი კაცია',t:'Namdvili katsia',r:'Настоящий мужик / человек слова',c:'Подчеркнуть авторитет и надежность.'},
-   {g:'სიტყვის პატრონია',t:'Sitqvis patronia',r:'Хозяин своего слова',c:'Про того, кто отвечает за базар.'},
-   {g:'მაგარი ვაჟკაცია',t:'Magari vazhkatsia',r:'Реальный джигит / достойный парень',c:'Уважительная оценка характера.'},
-   {g:'ასწორებს!',t:'Astsorebs!',r:'Кайфово! / Круто!',c:'Одобрение ситуации, вещи или действия.'},
-   {g:'თესლია!',t:'Teslia!',r:'Пушка! / Лютая вещь!',c:'Жёсткий уличный сленг для высшего восторга (про вещь, тачку, очки).'}
-  ]},
-  {title:'Топ-17 базовых глаголов (Спряжение по лицам)',rows:[
-   {g:'მესმის / მივხვდი',t:'mesmis / mivkhvdi',r:'Понимать / Догнать',c:'აზრზე ხარ, რას ვამბობ? *(Сечешь, о чём я?)*'},
-   {g:'მესმის',t:'mesmis',r:'Слышать',c:'კარგად გესმის ჩემი? *(Хорошо меня слышишь?)*'},
-   {g:'ვიცი',t:'vitsi',r:'Знать (инфу)',c:'არ ვიცი, რა ხდება. *(Не в курсе, что происходит.)*'},
-   {g:'ვიცნობ',t:'vitsnob',r:'Знать (человека)',c:'რამდენი წელია ვიცნობ! *(Сколько лет его знаю!)*'},
-   {g:'აზრზე ვარ',t:'azrze var',r:'Быть в теме',c:'საერთოდ აზრზე არ არის. *(Вообще не отдупляет.)*'},
-   {g:'ვდგავარ',t:'vdgavar',r:'Стоять',c:'გარეთ ვდგავარ, გამოდი. *(Стою на улице, выходи.)*'},
-   {g:'მიდევს',t:'midevs',r:'Лежать (вещи)',c:'მაგიდაზე დევს. *(На столе лежит.)*'},
-   {g:'ვზივარ',t:'vzivar',r:'Сидеть',c:'სახლში ვზივარ. *(Сижу дома.)*'},
-   {g:'მინდა',t:'minda',r:'Хотеть / Надо',c:'რა გინდა, ძმაო? *(Чего хочешь, брат?)*'},
-   {g:'მაქვს',t:'makvs',r:'Иметь (есть)',c:'დრო არ მაქვს. *(Нет времени.)*'},
-   {g:'ვლაპარაკობ',t:'vlaparakob',r:'Говорить (процесс)',c:'ქართულად ცოტა ვლაპარაკობ. *(Немного говорю по-грузински.)*'},
-   {g:'ვფიქრობ',t:'vpikrob',r:'Думать / Считать',c:'რას ფიქრობ ამაზე? *(Что думаешь об этом?)*'},
-   {g:'მჯერა',t:'mjera',r:'Верить',c:'არ გჯერა ჩემი? *(Не веришь мне?)*'},
-   {g:'მოვდივარ',t:'movdivar',r:'Приходить (сюда)',c:'ხუთ წუთში მოვდივარ. *(Через 5 минут буду.)*'},
-   {g:'მივდივარ',t:'mivdivar',r:'Уходить (тудა)',c:'სახლში მივდივარ. *(Иду домой.)*'},
-   {g:'ვაკეთებ',t:'vaketeb',r:'Делать',c:'რას აკეთებ ახლა? *(Что сейчас делаешь?)*'},
-   {g:'ვყიდულობ',t:'vqidulob',r:'Покупать',c:'ახალ სათვალეს ვყიდულობ. *(Покупаю новые очки.)*'}
-  ]},
-  {title:'Логика приставок: Направление и адресат',rows:[
-   {g:'დამეხმარე',t:'damekhmare',r:'Помоги мне (вообще)',c:'**და-** — законченное, полноценное действие.'},
-   {g:'მომეხმარე',t:'momekhmare',r:'Помоги мне (подойди сюда)',c:'**მო-** — вектор действия направлен **к говорящему**.'},
-   {g:'წამახმარე',t:'tsamakhmare',r:'Чуть подтолкни / подсоби',c:'**წა-** — легкое усилие, сдвинуть с мертвой точки (идеально для жима).'},
-   {g:'მითხარი',t:'mitkhari',r:'Скажи мне',c:'Просьба / требование объяснить.'},
-   {g:'გითხარი',t:'gitkhari',r:'Я сказал тебе',c:'**ხომ გითხარი!** — *Я же тебе говорил!*'},
-   {g:'გისმენ',t:'gismen',r:'Слушаю тебя',c:'Главная фраза, когда берёшь трубку телефона, или «я весь во внимании».'},
-   {g:'ყველა ყური ვარ',t:'qvela quri var',r:'Я — все уши',c:'Разговорный аналог «весь во внимании».'}
-  ]},
-  {title:'Тренажерный зал (Качалка-сленг)',rows:[
-   {g:'აქ ვინმე ვარჯიშობს? / დაკავებულია?',t:'Ak vinme varjishobs? / Dakavebulia?',r:'Здесь кто-то занимается? / Занято?',c:''},
-   {g:'მონაცვლეობით გავაკეთოთ?',t:'Monatsvleobit gavaketot?',r:'По очереди поделаем?',c:''},
-   {g:'რამდენი მისვლა დაგრჩა?',t:'Ramdeni misvla dagrcha?',r:'Сколько подходов осталось?',c:''},
-   {g:'ბოლო მისვლა მაქვს',t:'Bolo misvla makvs',r:'У меня последний подход.',c:''},
-   {g:'ძმაო, დამიზღვიე რა',t:'Dzmao, damizghvie ra',r:'Брат, подстрахуй, а?',c:''},
-   {g:'ცოტა წამახმარე, თუ გავიჭედე',t:'Tsota tsamakhmare, tu gavichede',r:'Чуть подтолкни, если застряну.',c:''},
-   {g:'ბლინები / ჰანტელები',t:'blinebi / hantelebi',r:'Блины / гантели.',c:''},
-   {g:'ტურნიკი / ორძელი / ჟიმი',t:'turniki / ordzeli / zhimi',r:'Турник / брусья / жим лежа.',c:''},
-   {g:'გახურება',t:'gakhureba',r:'Разминка (разогрев).',c:''},
-   {g:'გავიჭედე / დავიბრიდე',t:'gavichede / davibride',r:'Мышцы забились / сдох, выдохся.',c:''},
-   {g:'მაგარ ხოდზე ხარ!',t:'Magar khodze khar!',r:'В мощной форме ты! (Комплимент).',c:''}
-  ]},
-  {title:'Рынок, покупки и очки по образцу',rows:[
-   {g:'აი, ზუსტად მასეთი მინდა!',t:'Ai, zustad maseti minda!',r:'Вот, точно такой же хочу! (Показывая образец друга).',c:''},
-   {g:'იმენა ეგეთი მინდა',t:'Imena egeti minda',r:'Хочу именно такой (уличный акцент).',c:''},
-   {g:'უფრო მუქი / უფრო ღია აქვთ?',t:'Ufro muki / ufro ghia akvt?',r:'Есть потемнее / посветлее?',c:''},
-   {g:'სახეზე როგორ მიჯდება?',t:'Sakheze rogor mijdeba?',r:'Как они мне на лицо садятся?',c:''},
-   {g:'ცოტა დააკელი, ძმაო',t:'Tsota daakeli, dzmao',r:'Скинь немного цену, брат (главная фраза для торга).',c:''},
-   {g:'ბოლო ფასი რა არის?',t:'Bolo fasi ra aris?',r:'Какая окончательная цена?',c:''},
-   {g:'არ მაწყობს',t:'Ar matsqobs',r:'Меня не устраивает.',c:''}
-  ]},
-  {title:'Реакции на удивление и споры',rows:[
-   {g:'რას მელაპარაკები?!',t:'Ras melaparakebi?!',r:'Да ладно?! / Ты серьёзно?! / Да ты гонишь! (Удивление от новости).',c:''},
-   {g:'რას ამბობ?!',t:'Ras ambob?!',r:'Что ты говоришь?! / Да ты что?! (То же самое, очень частое).',c:''},
-   {g:'რას ლაპარაკობ, კაი ტიპია!',t:'Ras laparakob, kai tipia!',r:'О чём ты говоришь, он ровный тип! (Когда впрягаешься за кореша).',c:''},
-   {g:'ტყუილად ლაპარაკობ',t:'Tquilad laparakob',r:'Зря болтаешь / пустословишь.',c:''}
-  ]}
- ]},
- {id:'sb',title:'Шпаргалка по живому грузинскому языку и тбилисскому сленгу',levels:[
-  {title:'Быт и поиск',rows:[
-   {g:'თვის გადასახადი',t:'tvis gadasakhadi',r:'Оплата за месяц / ежемесячный платёж',c:'კომუნალურების თვის გადასახადი (*komunalurebis tvis gadasakhadi* — оплата комуналки за месяц)'},
-   {g:'არა, მოიცა, მე თვითონ ვიპოვი ეგეთი',t:'ara, moitsa, me tviton vipovi egeti',r:'Не, погоди, я сам такой же найду',c:'Используй, когда тебе предлагают вариант, а ты хочешь найти дешевле или лучше сам'},
-   {g:'ახლავე ვიპოვი',t:'akhlave vipovi',r:'Сейчас же найду',c:'**ახლავე ვიპოვი** ტელეფონში (*akhlave vipovi telefonshi* — Сейчас же найду в телефоне)'}
-  ]},
-  {title:'Грамматика и связки',rows:[
-   {g:'რახან',t:'rakhan',r:'Раз уж / puisque',c:'**რახან** აქ ხარ, ბარემ მომეხმარე (*rakhan ak khar, barem momekhmare* — Раз уж ты здесь, заодно помоги)'},
-   {g:'ბარემ',t:'barem',r:'Заодно / раз пошла такая пьянка',c:'მაღაზიაში მივდივარ და **ბარემ** პურსაც ვიყიდი (*...da barem pursats viqidi* — Иду в магазин и заодно хлеба куплю)'},
-   {g:'viteom',t:'vitom',r:'Якобы / типа / будто бы',c:'**viteom** არ იცოდი (*vitom ar itsodi* — Типа ты не знал)'},
-   {g:'ხოლმე',t:'kholme',r:'Частица регулярности («бывает», периодически)',c:'აქ ხშირად მოვდივარ **ხოლმე** (*ak khshirad movdivar kholme* — Я сюда частенько захожу)'},
-   {g:'თorem',t:'torem',r:'А то / иначе',c:'დროზე ქერი, **თorem** დაგვაგვიანდება (*droze keni, torem dagvagviandeba* — Делай быстрее, а то опоздаем)'},
-   {g:'შემთხვევით ხომ არ იცი...',t:'shemtkhvevit khom ar itsi...',r:'Ты случайно не знаешь...',c:'**შემთხვევით ხომ არ იცი**, სად არის ეს ქუჩა? (*...sad aris es kucha?* — Случайно не знаешь, где эта улица?)'},
-   {g:'არ / ვერ',t:'ar / ver',r:'Не (просто отказ) / Не могу (нет возможности)',c:'**არ** ვაკეთებ (не делаю) vs **ვერ** ვაკეთებ (не могу сделать)'}
-  ]},
-  {title:'База и реакции',rows:[
-   {g:'რა არის? (rare)',t:'ra aris? (raris?)',r:'Что такое? / Чего?',c:'**რა არის**, რა ხდება? (*ra aris, ra khdeba?* — Чего такое, что происходит?)'},
-   {g:'არაუშავს',t:'araushavs',r:'Ничего страшного / без проблем / проехали',c:'— ბოდიში! — **არაუშავს**, ძმაო (*— Извини! — Без проблем, брат*)'},
-   {g:'წავედით',t:'tsavedit',r:'Погнали / пошли',c:'აბა, **წავედით**! (*aba, tsavedit!* — Ну, погнали!)'},
-   {g:'მოკლედ',t:'mokled',r:'Короче говоря / в общем',c:'**მოკლედ**, ასეთი სიტუაციაა (*mokled, aseti situatsiaa* — Короче, такая ситуация)'},
-   {g:'მეზარება',t:'mezareba',r:'Мне лень / влом',c:'დღეს გარეთ გასვლა **მეზარება** (*dghes garet gasvla mezareba* — Сегодня мне лень выходить на улицу)'},
-   {g:'დაიკიდე',t:'daikide',r:'Забей болт / не парься',c:'მაგაზე ნუ ინერვიულებ, **დაიკიდე** (*magaze nu inerviuleb, daikide* — Не нервничай насчёт этого, забей)'},
-   {g:'სულ ერთია',t:'sul ertia',r:'Мне похер / без разницы',c:'ჩემთვის **სულ ერთია** (*chemtvis sul ertia* — Для меня без разницы)'},
-   {g:'მივხვდი',t:'mivkhvdi',r:'Понял / дошло',c:'კაი, **მივხვდი**, აღარ გააგრძელო (*kai, mivkhvdi, aghar gaagrdzelo* — Ладно, понял, больше не продолжай)'},
-   {g:'აბა, ჰე!',t:'aba, he!',r:'Всё, давай / пока',c:'**აბა, ჰე**, ხვალამდე! (*aba, he, khvalamde!* — Ну давай, до завтра!)'}
-  ]},
-  {title:'Тбилисский сленг',rows:[
-   {g:'ჩაგრავ / მიჩაგრავ',t:'chagrav / michagrav',r:'Душишь / грузишь / прессуешь (меня)',c:'კაი რა, გაჩერდი, **ნუ მიჩაგრავ**! (*kai ra, gacherdi, nu michagrav!* — Да ладно, тормозни, не душни!)'},
-   {g:'გავშტერდი',t:'gavshterdi',r:'Офигел / обалдел / ошарашен',c:'რომ გავიგე, სულ **გავშტერდი** (*rom gavige, sul gavshterdi* — Когда узнал, вообще офигел)'},
-   {g:'კაი ტიპი',t:'kai tipi',r:'Ровный, крутой, уважаемый в тусовке парень',c:'მაგარი **კაი ტიპია**, გირჩევ გაიცნო (*magari kai tipia, girchev gaitsno* — Очень ровный тип, советую познакомиться)'},
-   {g:'დაბოღმილი',t:'daboghmili',r:'Завистливый, злопамятный, набыченный',c:'მაგას ნუ უსმენ, **დაბოღმილი** მასტია (*magas nu usmen, daboghmili mastia* — Его не слушай, он завистливый тип)'},
-   {g:'კაი პონტია',t:'kai pontia',r:'Прикольная тема / хороший движ / вайб',c:'მაგარი ადგილია, **კაი პონტია** (*magari adgilia, kai pontia* — Классное место, хороший вайб)'}
-  ]},
-  {title:'Идиомы',rows:[
-   {g:'თავში ქვა იხალოს',t:'tavshi kva ikhalos',r:'Пусть камень о голову разобьёт (да пошёл он / мне плевать)',c:'თუ არ უნდა, **თავში ქვა უხლია** (*tu ar unda, tavshi kva ukhlia* — Если не хочет, да и хрен с ним)'},
-   {g:'ენაზე უკბინოს',t:'enaze ukbinos',r:'
+﻿// State
+let currentChapter = null;
+let currentLevel = null;
+let currentCardIndex = 0;
+let isCardFlipped = false;
+let currentQuizIndex = 0;
+let quizItems = [];
+
+// DOM
+const screenChapters = document.getElementById('screen-chapters');
+const screenLevels = document.getElementById('screen-levels');
+const screenAction = document.getElementById('screen-level-action');
+const btnBack = document.getElementById('btn-back');
+const appTitle = document.getElementById('app-title');
+
+// Theme toggle
+const btnTheme = document.getElementById('btn-theme');
+btnTheme.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+});
+const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+// Navigation
+function showScreen(screen) {
+  [screenChapters, screenLevels, screenAction].forEach(s => s.classList.remove('active'));
+  screen.classList.add('active');
+  btnBack.classList.toggle('hidden', screen === screenChapters);
+}
+
+btnBack.addEventListener('click', () => {
+  if (screenAction.classList.contains('active')) {
+    renderLevels(currentChapter);
+  } else if (screenLevels.classList.contains('active')) {
+    renderChapters();
+  }
+});
+
+// 1. Render Chapters
+function renderChapters() {
+  appTitle.textContent = "Грузинский язык";
+  const list = document.getElementById('chapters-list');
+  list.innerHTML = APP_DATA.map(ch => `
+    <button class="menu-item" onclick="onSelectChapter('${ch.id}')">
+      <span>${ch.title}</span>
+      <span class="badge-count">${ch.levels.length} уровней</span>
+    </button>
+  `).join('');
+  showScreen(screenChapters);
+}
+
+window.onSelectChapter = (chapterId) => {
+  currentChapter = APP_DATA.find(c => c.id === chapterId);
+  renderLevels(currentChapter);
+};
+
+// 2. Render Levels
+function renderLevels(chapter) {
+  appTitle.textContent = chapter.title;
+  const list = document.getElementById('levels-list');
+  list.innerHTML = chapter.levels.map(lvl => `
+    <button class="menu-item" onclick="onSelectLevel('${lvl.id}')">
+      <span>${lvl.title}</span>
+      <span class="badge-count">${lvl.items.length} фраз</span>
+    </button>
+  `).join('');
+  showScreen(screenLevels);
+}
+
+window.onSelectLevel = (levelId) => {
+  currentLevel = currentChapter.levels.find(l => l.id === levelId);
+  appTitle.textContent = currentLevel.title;
+  showScreen(screenAction);
+  initLevelAction();
+};
+
+// 3. Level Actions (Tabs, List, Flashcards, Quiz)
+function initLevelAction() {
+  initList();
+  initCards();
+  initQuiz();
+}
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// List & Search
+const searchInput = document.getElementById('search-input');
+const wordsList = document.getElementById('words-list');
+const phrasesCount = document.getElementById('phrases-count');
+
+function initList() {
+  searchInput.value = '';
+  renderList(currentLevel.items);
+}
+
+function renderList(items) {
+  phrasesCount.textContent = `Показано: ${items.length} из ${currentLevel.items.length}`;
+  wordsList.innerHTML = items.map(w => `
+    <div class="word-card">
+      <div class="word-ka font-geo">${w.ka}</div>
+      <div class="word-tr">${w.tr}</div>
+      <div class="word-ru">${w.ru}</div>
+      ${w.ctx ? `<div class="word-context">${w.ctx}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+searchInput.addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  const filtered = currentLevel.items.filter(w => 
+    w.ka.toLowerCase().includes(q) || 
+    w.ru.toLowerCase().includes(q) || 
+    w.tr.toLowerCase().includes(q)
+  );
+  renderList(filtered);
+});
+
+// Flashcards
+const flashcard = document.getElementById('flashcard');
+const cardRu = document.getElementById('card-ru');
+const cardKa = document.getElementById('card-ka');
+const cardTr = document.getElementById('card-tr');
+const cardEx = document.getElementById('card-ex');
+const cardCounter = document.getElementById('card-counter');
+const cardFront = flashcard.querySelector('.card-front');
+const cardBack = flashcard.querySelector('.card-back');
+
+function initCards() {
+  currentCardIndex = 0;
+  showCard(0);
+}
+
+function showCard(index) {
+  isCardFlipped = false;
+  cardFront.classList.remove('hidden');
+  cardBack.classList.add('hidden');
+  
+  const item = currentLevel.items[index];
+  cardRu.textContent = item.ru;
+  cardKa.textContent = item.ka;
+  cardTr.textContent = item.tr;
+  cardEx.textContent = item.ctx || '';
+  cardCounter.textContent = `${index + 1} / ${currentLevel.items.length}`;
+}
+
+flashcard.addEventListener('click', () => {
+  isCardFlipped = !isCardFlipped;
+  cardFront.classList.toggle('hidden', isCardFlipped);
+  cardBack.classList.toggle('hidden', !isCardFlipped);
+});
+
+document.getElementById('btn-prev-card').addEventListener('click', () => {
+  if (currentCardIndex > 0) {
+    currentCardIndex--;
+    showCard(currentCardIndex);
+  }
+});
+document.getElementById('btn-next-card').addEventListener('click', () => {
+  if (currentCardIndex < currentLevel.items.length - 1) {
+    currentCardIndex++;
+    showCard(currentCardIndex);
+  }
+});
+
+// Quiz (Translate from RU to KA)
+const quizRu = document.getElementById('quiz-ru');
+const quizInput = document.getElementById('quiz-input');
+const quizCounter = document.getElementById('quiz-counter');
+const quizForm = document.getElementById('quiz-form');
+const btnCheck = document.getElementById('btn-check');
+const btnNextQuiz = document.getElementById('btn-next-quiz');
+const quizFeedback = document.getElementById('quiz-feedback');
+
+function initQuiz() {
+  // Перемешиваем фразы для теста
+  quizItems = [...currentLevel.items].sort(() => Math.random() - 0.5);
+  currentQuizIndex = 0;
+  loadQuizQuestion(0);
+}
+
+function loadQuizQuestion(index) {
+  const item = quizItems[index];
+  quizRu.textContent = item.ru;
+  quizInput.value = '';
+  quizInput.disabled = false;
+  quizFeedback.className = 'feedback-box hidden';
+  quizFeedback.innerHTML = '';
+  btnCheck.classList.remove('hidden');
+  btnNextQuiz.classList.add('hidden');
+  quizCounter.textContent = `${index + 1} / ${quizItems.length}`;
+  setTimeout(() => quizInput.focus(), 50);
+}
+
+// Нормализация для сравнения (удаляет знаки препинания и пробелы по краям)
+function cleanText(text) {
+  return text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?!]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+quizForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (btnCheck.classList.contains('hidden')) return;
+
+  const current = quizItems[currentQuizIndex];
+  const userAns = cleanText(quizInput.value);
+  
+  // Допускаем совпадение с ka (или вариантами, если есть слэш '/')
+  const correctVariants = current.ka.split('/').map(v => cleanText(v));
+  const isMatch = correctVariants.some(v => v === userAns || cleanText(current.ka) === userAns);
+
+  quizFeedback.classList.remove('hidden');
+  quizInput.disabled = true;
+  btnCheck.classList.add('hidden');
+  btnNextQuiz.classList.remove('hidden');
+
+  if (isMatch) {
+    quizFeedback.className = 'feedback-box correct';
+    quizFeedback.innerHTML = 'Правильно! 🎉';
+  } else {
+    quizFeedback.className = 'feedback-box wrong';
+    quizFeedback.innerHTML = `
+      <div>Не совсем так. Правильный ответ:</div>
+      <div class="feedback-answer font-geo">${current.ka}</div>
+    `;
+  }
+});
+
+btnNextQuiz.addEventListener('click', () => {
+  if (currentQuizIndex < quizItems.length - 1) {
+    currentQuizIndex++;
+    loadQuizQuestion(currentQuizIndex);
+  } else {
+    // Конец раунда
+    quizRu.textContent = "Раунд завершён! Отличная работа!";
+    quizInput.classList.add('hidden');
+    btnNextQuiz.classList.add('hidden');
+    quizFeedback.className = 'feedback-box correct';
+    quizFeedback.innerHTML = `<button class="btn btn-primary" onclick="initQuiz()" style="width:100%">Пройти заново</button>`;
+  }
+});
+
+// App Start
+renderChapters();
