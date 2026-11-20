@@ -1,4 +1,4 @@
-﻿const CACHE='gentext-v1';
+const CACHE='gentext-v1';
 self.addEventListener('install',e=>{
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/','/style.css','/app.js','/manifest.json'])))
