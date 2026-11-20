@@ -1,0 +1,17 @@
+:root{
+  --bg:#fafafa; --text:#222; --accent:#2c3e50; --card:#fff; --border:#ddd;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#1e1e1e; --text:#e0e0e0; --accent:#fff; --card:#252525; --border:#444; }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui, sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:1rem}
+header,h1{margin-bottom:1rem}
+#app{padding-bottom:2rem}
+select,input{width:100%;padding:.5rem;margin:.5rem 0}
+#view{margin-top:1rem}
+.modes button{padding:.5rem 1rem;margin:.2rem;cursor:pointer}
+.row{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:1rem;margin:.5rem 0}
+.card{border:2px solid var(--border);border-radius:8px;padding:2rem;text-align:center;margin:1rem 0}
+.hidden{display:none!important}
+#back{margin-top:1rem}
