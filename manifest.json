@@ -1,7 +1,7 @@
-﻿{
+{
   "name": "Gentext",
   "short_name": "Gentext",
-  "description": "ÐŸÑ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð´Ð»Ñ Ð¸Ð·ÑƒÑ‡ÐµÐ½Ð¸Ñ Ð³Ñ€ÑƒÐ·ÑÐºÐ¾Ð³Ð¾ ÑÐ·Ñ‹ÐºÐ°",
+  "description": "Приложение для изучения грузского языка",
   "start_url": "./index.html?source=swap",
   "display": "standalone",
   "background_color": "#2c3e50",
