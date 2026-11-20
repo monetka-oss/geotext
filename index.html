@@ -1,30 +1,37 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Грузинский язык</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1e293b">
+  <meta name="theme-color" content="#090d16">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="app-header">
+  <!-- Фоновые градиентные сферы для Liquid Glass -->
+  <div class="glass-orb orb-1"></div>
+  <div class="glass-orb orb-2"></div>
+  <div class="glass-orb orb-3"></div>
+
+  <header class="app-header glass-bar">
     <div class="header-left">
-      <button id="btn-back" class="icon-btn hidden" aria-label="Назад">←</button>
+      <button id="btn-back" class="icon-btn hidden" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
       <h1 id="app-title">Грузинский язык</h1>
     </div>
     <div class="header-right">
-      <button id="btn-theme" class="icon-btn" aria-label="Сменить тему">🌓</button>
+      <button id="btn-theme" class="icon-btn" aria-label="Сменить тему">✨</button>
     </div>
   </header>
 
   <main class="container">
     <!-- 1. Экран Глав -->
     <section id="screen-chapters" class="screen active">
-      <p class="subtitle">Выберите главу для изучения:</p>
+      <p class="subtitle">Выберите раздел:</p>
       <div id="chapters-list" class="grid-list"></div>
     </section>
 
@@ -33,32 +40,64 @@
       <div id="levels-list" class="grid-list"></div>
     </section>
 
-    <!-- 3. Экран действий уровня: Поиск/Список, Карточки, Тест -->
+    <!-- 3. Экран действий уровня -->
     <section id="screen-level-action" class="screen">
-      <div class="tab-bar">
-        <button class="tab-btn active" data-tab="tab-list">Список / Поиск</button>
+      <!-- Навигационная панель режимов (Liquid Glass Segmented Control) -->
+      <nav class="tab-bar glass-panel">
+        <button class="tab-btn active" data-tab="tab-choice">Выбор (4)</button>
+        <button class="tab-btn" data-tab="tab-quiz">Ввод</button>
         <button class="tab-btn" data-tab="tab-cards">Карточки</button>
-        <button class="tab-btn" data-tab="tab-quiz">Тест</button>
+        <button class="tab-btn" data-tab="tab-list">Словарь</button>
+      </nav>
+
+      <!-- РЕЖИМ 1: ТЕСТ С 4 ВАРИАНТАМИ (КАК НА СКРИНШОТЕ) -->
+      <div id="tab-choice" class="tab-content active">
+        <div class="quiz-container glass-panel">
+          <div class="quiz-top-info">
+            <span id="choice-counter" class="counter-label">1 из 10</span>
+            <div class="progress-track">
+              <div id="choice-progress-bar" class="progress-fill"></div>
+            </div>
+          </div>
+          <div id="choice-ru" class="quiz-question">Загрузка...</div>
+          <div id="choice-options" class="choice-options-grid"></div>
+          <div id="choice-feedback" class="feedback-toast hidden"></div>
+        </div>
       </div>
 
-      <!-- Вкладка: Список и Поиск -->
-      <div id="tab-list" class="tab-content active">
-        <input type="text" id="search-input" placeholder="Поиск по русски или ქართულად..." class="input-field">
-        <div id="phrases-count" class="counter-text"></div>
-        <div id="words-list" class="words-container"></div>
+      <!-- РЕЖИМ 2: ТЕСТ НА ВВОД -->
+      <div id="tab-quiz" class="tab-content">
+        <div class="quiz-container glass-panel">
+          <div class="quiz-top-info">
+            <span id="quiz-counter" class="counter-label">1 из 10</span>
+            <div class="progress-track">
+              <div id="quiz-progress-bar" class="progress-fill"></div>
+            </div>
+          </div>
+          <div id="quiz-ru" class="quiz-question">Переведите слово</div>
+          
+          <form id="quiz-form" onsubmit="return false;">
+            <input type="text" id="quiz-input" class="input-field font-geo glass-input" placeholder="Введите по-грузински..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <div class="quiz-actions">
+              <button type="submit" id="btn-check" class="btn btn-primary glass-btn-primary">Проверить</button>
+              <button type="button" id="btn-next-quiz" class="btn btn-secondary glass-btn hidden">Дальше →</button>
+            </div>
+          </form>
+          <div id="quiz-feedback" class="feedback-toast hidden"></div>
+        </div>
       </div>
 
-      <!-- Вкладка: Карточки -->
+      <!-- РЕЖИМ 3: КАРТОЧКИ (3D FLIP) -->
       <div id="tab-cards" class="tab-content">
-        <div class="card-wrapper">
-          <div id="flashcard" class="flashcard">
+        <div class="card-scene">
+          <div id="flashcard" class="flashcard glass-panel">
             <div class="card-side card-front">
-              <span class="badge">Русский</span>
+              <span class="pill-badge">Русский</span>
               <div id="card-ru" class="card-text"></div>
               <small class="card-hint">Нажмите, чтобы перевернуть</small>
             </div>
-            <div class="card-side card-back">
-              <span class="badge">ქართული</span>
+            <div class="card-side card-back hidden">
+              <span class="pill-badge accent">ქართული</span>
               <div id="card-ka" class="card-text font-geo"></div>
               <div id="card-tr" class="card-subtext"></div>
               <div id="card-ex" class="card-context"></div>
@@ -66,31 +105,17 @@
           </div>
         </div>
         <div class="card-controls">
-          <button id="btn-prev-card" class="btn btn-secondary">← Назад</button>
-          <span id="card-counter" class="counter-text">1 / 10</span>
-          <button id="btn-next-card" class="btn btn-primary">Вперёд →</button>
+          <button id="btn-prev-card" class="btn glass-btn">← Назад</button>
+          <span id="card-counter" class="counter-label">1 / 10</span>
+          <button id="btn-next-card" class="btn btn-primary glass-btn-primary">Вперёд →</button>
         </div>
       </div>
 
-      <!-- Вкладка: Тест -->
-      <div id="tab-quiz" class="tab-content">
-        <div class="quiz-box">
-          <div class="quiz-header">
-            <span class="badge">Переведите на грузинский:</span>
-            <span id="quiz-counter" class="counter-text">1 / 10</span>
-          </div>
-          <div id="quiz-ru" class="quiz-prompt"></div>
-          
-          <form id="quiz-form" onsubmit="return false;">
-            <input type="text" id="quiz-input" class="input-field font-geo" placeholder="Введите по-грузински..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-            <div class="quiz-actions">
-              <button type="submit" id="btn-check" class="btn btn-primary">Проверить</button>
-              <button type="button" id="btn-next-quiz" class="btn btn-secondary hidden">Дальше →</button>
-            </div>
-          </form>
-
-          <div id="quiz-feedback" class="feedback-box hidden"></div>
-        </div>
+      <!-- РЕЖИМ 4: СЛОВАРЬ И ПОИСК -->
+      <div id="tab-list" class="tab-content">
+        <input type="text" id="search-input" placeholder="Поиск по-русски или ქართულად..." class="input-field glass-input">
+        <div id="phrases-count" class="counter-label" style="margin-bottom:0.8rem;"></div>
+        <div id="words-list" class="words-container"></div>
       </div>
     </section>
   </main>
